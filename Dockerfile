@@ -1,5 +1,18 @@
-FROM ubuntu 
-RUN apt update
-RUN apt update apache2 -y
-ADD index.html /var/www/html/
-ENTRYPOINT apachectl -D FOREGROUND
+pipeline {
+    agent any 
+
+    stages {
+        stage('Build Image') {
+            steps {
+                // This builds your Docker image
+                sh 'docker build -t my-app:develop .'
+            }
+        }
+        stage('Run Test') {
+            steps {
+                // This checks if the image was created successfully
+                sh 'docker images | grep my-app'
+            }
+        }
+    }
+}
